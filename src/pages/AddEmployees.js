@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Container, Card, Form, Button } from "react-bootstrap";
+import { parse } from "papaparse";
 import NavComponent from "../components/NavComponent";
 import addEmployee from "../images/addEmployee.png";
 
@@ -10,7 +11,27 @@ const AddEmployees = () => {
     lastName: "",
     email: "",
   };
+  const initialCSVvalue = [
+    {
+      firstName: "",
+      lastName: "",
+      email: "",
+    },
+  ];
   const [formInfo, setFormInfo] = useState(initialValue);
+  const [highlighted, setHighlighted] = useState(false);
+  const [contacts, setContacts] = useState(initialCSVvalue);
+  const handleonCSV = (data) => {
+    const nV = [{ ...contacts }];
+    nV.firstName = data.firstName;
+    nV.lastName = data.lastName;
+    nV.email = data.email;
+    setContacts(nV);
+    handleDropSubmit();
+  };
+  const handleDropSubmit = () => {
+    console.log(contacts);
+  };
   const handleOnBlur = (e) => {
     const field = e.target.name;
     const value = e.target.value;
@@ -48,6 +69,7 @@ const AddEmployees = () => {
           </div>
         </div>
         <div className="d-flex flex-column flex-md-row py-5">
+          {/* Employee Add Form */}
           <div className="w-100">
             <Card className="p-3 border-0">
               <Form onSubmit={handleFormSubmit} className="text-start">
@@ -91,6 +113,7 @@ const AddEmployees = () => {
               </Form>
             </Card>
           </div>
+          {/* CSV File Drop Here */}
           <div className="w-100 d-flex flex-column flex-md-row align-items-center justify-content-evenly">
             <div className="d-none d-md-block d-flex flex-column align-items-center">
               <div
@@ -130,8 +153,51 @@ const AddEmployees = () => {
                 }}
               ></div>
             </div>
-            <div className="text-center border border-2 p-3 rounded fw-bold w-50">
-              Drop The File
+            <div
+              className={`text-center border border-2 p-3 rounded fw-bold w-50 ${
+                highlighted ? "border-success" : "border-secondary"
+              }`}
+              onDragEnter={() => {
+                setHighlighted(true);
+              }}
+              onDragLeave={() => {
+                setHighlighted(false);
+              }}
+              onDragOver={(e) => {
+                e.preventDefault();
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                setHighlighted(false);
+                Array.from(e.dataTransfer.files).forEach(async (file) => {
+                  if (file.type !== "text/csv") {
+                    return alert("Only CSV file is allowed!");
+                  }
+                  const text = await file.text();
+                  const result = parse(text, { header: true });
+                  const output = result.data.filter((item) => {
+                    const regex =
+                      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+                    return (
+                      regex.test(item.email) === true &&
+                      item.firstName !== "" &&
+                      item.lastName !== ""
+                    );
+                  });
+                  setContacts((ex) => [...ex, ...output.data]);
+                  // output.forEach((data) => {
+                  //   const arr = [data.firstName];
+                  //   // arr.push(...data.firstName);
+                  //   setContacts((data) => [...data]);
+                  // });
+                  console.log(contacts);
+                  // setContacts((existing) => [...existing, ...output.data]);
+                  // handleDropSubmit();
+                  // setContacts((existing) => [...existing, ...result.data]);
+                });
+              }}
+            >
+              DROP HERE
             </div>
           </div>
         </div>
