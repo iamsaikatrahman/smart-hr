@@ -101,6 +101,7 @@ const AddCSVFile = () => {
           <br />
           <input type="submit" value="Submit" className="mt-2" />
         </form>
+        -------- or ------------
         <div
           className={`text-center border border-2 p-3 rounded fw-bold w-50 ${
             highlighted ? "border-success" : "border-secondary"
