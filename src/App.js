@@ -2,9 +2,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import AboutUs from "./pages/AboutUs";
-import AddEmployees from "./pages/AddEmployees";
+import AddEmployees from "./pages/AddEmployees/AddEmployees";
 import Employees from "./pages/Employees";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
 
 function App() {
   return (
