@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import NavComponent from "../../components/NavComponent";
 import headerBG from "../../images/home_header_BG.png";
 import Footer from "../../shared/Footer";
+import HomeAboutUs from "./HomeAboutUs";
 
 const Home = () => {
   return (
@@ -38,6 +39,7 @@ const Home = () => {
             </div>
           </div>
         </Container>
+        <HomeAboutUs />
       </div>
       <Footer style={{ positon: "relative", bottom: "0", wdith: "100%" }} />
     </div>

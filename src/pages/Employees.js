@@ -83,7 +83,6 @@ const Employees = () => {
               <Table striped responsive bordered hover className="my-3">
                 <thead>
                   <tr>
-                    <th>Num</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -92,7 +91,6 @@ const Employees = () => {
                 <tbody>
                   {displayEmployees.map((employee) => (
                     <tr key={employee.id}>
-                      <td>{employee.id}</td>
                       <td>{employee.firstName}</td>
                       <td>{employee.lastName}</td>
                       <td>{employee.email}</td>
